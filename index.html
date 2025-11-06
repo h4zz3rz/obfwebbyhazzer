@@ -791,9 +791,10 @@ testAll();</textarea>
                 const theme = this.checked ? 'dark' : 'light';
                 document.documentElement.setAttribute('data-theme', theme);
                 localStorage.setItem('theme', theme);
+                logToConsole(`Theme changed to: ${theme} mode`);
             });
 
-            // Existing functionality
+            // DOM Elements
             const inputCode = document.getElementById('inputCode');
             const outputCode = document.getElementById('outputCode');
             const obfuscateBtn = document.getElementById('obfuscateBtn');
@@ -975,19 +976,29 @@ testAll();`;
                 
                 logToConsole('Kode berhasil disalin ke clipboard', 'success');
             });
-            
-            // Initialize
-            updateCharCount();
-            updateStats('', '');
-            inputCode.value = exampleCode;
-            logToConsole('Aplikasi siap digunakan. Pilih fitur dan level obfuscation!');
 
-            // Helper functions
-            function updateCharCount() {
-                charCount.textContent = outputCode.value.length + ' karakter';
-            }
-            
-            function updateStats(original, obfuscated) {
-                const originalSize = original.length;
-                const obfuscatedSize = obfuscated.length;
-                const increaseRatio = originalSize > 0 ? ((obfuscatedSize - originalSize) / originalSize
+            // Minify function
+            minifyBtn.addEventListener('click', function() {
+                const code = inputCode.value;
+                if (!code.trim()) {
+                    logToConsole('Tidak ada kode untuk diminify', 'warning');
+                    return;
+                }
+
+                const startTime = performance.now();
+                const minified = minifyCode(code);
+                const endTime = performance.now();
+
+                outputCode.value = minified;
+                updateCharCount();
+                updateStats(code, minified);
+                performanceEl.textContent = `${(endTime - startTime).toFixed(2)}ms`;
+                
+                logToConsole(`Kode berhasil diminify dalam ${(endTime - startTime).toFixed(2)}ms`, 'success');
+            });
+
+            // Beautify function
+            beautifyBtn.addEventListener('click', function() {
+                const code = inputCode.value;
+                if (!code.trim()) {
+                    logToConsole('Tidak ada k
