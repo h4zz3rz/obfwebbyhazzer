@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Obf By Hazzer?</title>
+    <title>Advanced JavaScript Obfuscator - FIXED</title>
     <style>
         :root {
             --primary-color: #2196f3;
@@ -310,6 +310,7 @@
             border: 1px solid var(--border-color);
             cursor: pointer;
             transition: all 0.3s ease;
+            user-select: none;
         }
         
         .feature-item:hover {
@@ -320,6 +321,7 @@
         .feature-item.active {
             border-color: var(--primary-color);
             background: linear-gradient(135deg, var(--surface-color), var(--background-color));
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
         }
         
         .feature-icon {
@@ -332,6 +334,11 @@
             color: white;
             border-radius: 6px;
             font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .feature-item.active .feature-icon {
+            background: var(--secondary-color);
         }
         
         .level-selector {
@@ -537,8 +544,8 @@
     <div class="container">
         <div class="header">
             <div>
-                <h1>Advanced JavaScript Obfuscator</h1>
-                <p class="subtitle">New Update New Look </p>
+                <h1>Advanced JavaScript Obfuscator - FIXED</h1>
+                <p class="subtitle">Semua fitur sekarang bisa dipilih! ✅</p>
             </div>
             <div class="theme-switch">
                 <label for="themeToggle">Dark Mode</label>
@@ -760,6 +767,13 @@ testAll();</textarea>
                         </button>
                     </div>
                 </div>
+
+                <div class="feature-section">
+                    <h3>🔧 Active Features</h3>
+                    <div id="activeFeaturesList" style="background: var(--background-color); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 12px; min-height: 60px;">
+                        <div style="color: var(--text-secondary); text-align: center;">No features selected</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -800,6 +814,7 @@ testAll();</textarea>
             const charCount = document.getElementById('charCount');
             const ultraWarning = document.getElementById('ultraWarning');
             const successMessage = document.getElementById('successMessage');
+            const activeFeaturesList = document.getElementById('activeFeaturesList');
             
             // Stats elements
             const originalSizeEl = document.getElementById('originalSize');
@@ -810,8 +825,96 @@ testAll();</textarea>
             
             let currentLevel = 'medium';
             let activeFeatures = new Set(['rename', 'string', 'base64']);
+
+            // Update active features display
+            function updateActiveFeaturesDisplay() {
+                if (activeFeatures.size === 0) {
+                    activeFeaturesList.innerHTML = '<div style="color: var(--text-secondary); text-align: center;">No features selected</div>';
+                } else {
+                    activeFeaturesList.innerHTML = Array.from(activeFeatures).map(feature => 
+                        `<div style="padding: 4px 8px; margin: 2px 0; background: var(--surface-color); border-radius: 4px; border-left: 3px solid var(--primary-color);">✓ ${getFeatureName(feature)}</div>`
+                    ).join('');
+                }
+            }
+
+            function getFeatureName(feature) {
+                const featureNames = {
+                    'rename': 'Variable Renaming',
+                    'string': 'String Encoding',
+                    'control': 'Control Flow',
+                    'deadcode': 'Dead Code Injection',
+                    'base64': 'Base64 Encoding',
+                    'hex': 'Hex Encoding',
+                    'minify': 'Code Minifier',
+                    'beautify': 'Code Beautifier',
+                    'validator': 'JS Validator',
+                    'performance': 'Performance Test'
+                };
+                return featureNames[feature] || feature;
+            }
+
+            // Initialize display
+            updateActiveFeaturesDisplay();
             
-            // Contoh kode JavaScript
+            // Feature toggle - FIXED VERSION
+            featureItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const feature = this.getAttribute('data-feature') || this.getAttribute('data-tool');
+                    if (!feature) return;
+                    
+                    if (this.classList.contains('active')) {
+                        this.classList.remove('active');
+                        activeFeatures.delete(feature);
+                    } else {
+                        this.classList.add('active');
+                        activeFeatures.add(feature);
+                    }
+                    
+                    updateActiveFeaturesDisplay();
+                    logToConsole(`Feature ${getFeatureName(feature)} ${this.classList.contains('active') ? 'enabled' : 'disabled'}`);
+                });
+            });
+            
+            // Level selection
+            levelButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    levelButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentLevel = this.getAttribute('data-level');
+                    levelIndicatorEl.textContent = currentLevel.toUpperCase();
+                    
+                    if (currentLevel === 'ultra') {
+                        ultraWarning.style.display = 'block';
+                    } else {
+                        ultraWarning.style.display = 'none';
+                    }
+                    
+                    logToConsole(`Level changed to: ${currentLevel.toUpperCase()}`);
+                });
+            });
+            
+            // Console logging function
+            function logToConsole(message, type = 'info') {
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = `> ${message}`;
+                
+                if (type === 'error') {
+                    messageDiv.style.color = '#ef5350';
+                } else if (type === 'success') {
+                    messageDiv.style.color = '#81c784';
+                } else if (type === 'warning') {
+                    messageDiv.style.color = '#ffb74d';
+                } else {
+                    messageDiv.style.color = '#4dd0e1';
+                }
+                
+                outputConsole.appendChild(messageDiv);
+                outputConsole.scrollTop = outputConsole.scrollHeight;
+            }
+            
+            // Example code
             const exampleCode = `// Contoh kode JavaScript yang akan diobfuscate
 function greet(name) {
     return "Halo, " + name + "! Selamat datang di obfuscator.";
@@ -839,80 +942,52 @@ function testAll() {
 
 testAll();`;
             
-            // Feature toggle
-            featureItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    if (this.classList.contains('active')) {
-                        this.classList.remove('active');
-                        const feature = this.getAttribute('data-feature') || this.getAttribute('data-tool');
-                        if (feature) activeFeatures.delete(feature);
-                    } else {
-                        this.classList.add('active');
-                        const feature = this.getAttribute('data-feature') || this.getAttribute('data-tool');
-                        if (feature) activeFeatures.add(feature);
-                    }
-                });
+            // Load example
+            loadExampleBtn.addEventListener('click', function() {
+                inputCode.value = exampleCode;
+                logToConsole('Contoh kode dimuat');
             });
             
-            // Level selection
-            levelButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    levelButtons.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentLevel = this.getAttribute('data-level');
-                    levelIndicatorEl.textContent = currentLevel.toUpperCase();
-                    
-                    if (currentLevel === 'ultra') {
-                        ultraWarning.style.display = 'block';
-                    } else {
-                        ultraWarning.style.display = 'none';
-                    }
-                });
+            // Clear console
+            clearConsoleBtn.addEventListener('click', function() {
+                outputConsole.innerHTML = '';
+                successMessage.style.display = 'none';
             });
             
-            // Obfuscation functions
-            function generateRandomName(length = 6) {
-                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                let result = '';
-                for (let i = 0; i < length; i++) {
-                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+            // Copy function
+            copyBtn.addEventListener('click', function() {
+                if (!outputCode.value) {
+                    logToConsole('Tidak ada kode untuk disalin', 'warning');
+                    return;
                 }
-                return result;
-            }
-            
-            function base64Encode(str) {
-                return btoa(unescape(encodeURIComponent(str)));
-            }
-            
-            // Minify function
-            function minifyCode(code) {
-                return code
-                    .replace(/\/\/.*$/gm, '') // Remove single line comments
-                    .replace(/\/\*[\s\S]*?\*\//g, '') // Remove multi-line comments
-                    .replace(/\s+/g, ' ') // Replace multiple spaces with single space
-                    .replace(/\s*([=+\-*\/<>!]?=)\s*/g, '$1') // Remove spaces around operators
-                    .replace(/, /g, ',') // Remove spaces after commas
-                    .replace(/; /g, ';') // Remove spaces after semicolons
-                    .replace(/\s*{\s*/g, '{') // Format braces
-                    .replace(/\s*}\s*/g, '}')
-                    .trim();
-            }
-            
-            // Beautify function
-            function beautifyCode(code) {
-                let result = code;
-                let indentLevel = 0;
-                const lines = code.split('\n');
-                const beautified = [];
                 
-                lines.forEach(line => {
-                    const trimmed = line.trim();
-                    if (trimmed === '') return;
-                    
-                    if (trimmed.endsWith('}') || trimmed.endsWith('};')) {
-                        indentLevel = Math.max(0, indentLevel - 1);
-                    }
-                    
-                    beautified.push('  '.repeat(indentLevel) + trimmed);
-                    
-                    if (trimmed.endsWith('{') || trimmed.endsWith('{
+                outputCode.select();
+                document.execCommand('copy');
+                
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '✓ Tersalin!';
+                copyBtn.style.background = '#4caf50';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.style.background = '';
+                }, 2000);
+                
+                logToConsole('Kode berhasil disalin ke clipboard', 'success');
+            });
+            
+            // Initialize
+            updateCharCount();
+            updateStats('', '');
+            inputCode.value = exampleCode;
+            logToConsole('Aplikasi siap digunakan. Pilih fitur dan level obfuscation!');
+
+            // Helper functions
+            function updateCharCount() {
+                charCount.textContent = outputCode.value.length + ' karakter';
+            }
+            
+            function updateStats(original, obfuscated) {
+                const originalSize = original.length;
+                const obfuscatedSize = obfuscated.length;
+                const increaseRatio = originalSize > 0 ? ((obfuscatedSize - originalSize) / originalSize
