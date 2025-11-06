@@ -3,18 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JavaScript Obfuscator - White/Blue/Red Theme</title>
+    <title>Advanced JavaScript Obfuscator</title>
     <style>
+        :root {
+            --primary-color: #2196f3;
+            --secondary-color: #f44336;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --info-color: #00bcd4;
+            --background-color: #ffffff;
+            --surface-color: #f8f9fa;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #64b5f6;
+            --secondary-color: #ef5350;
+            --success-color: #81c784;
+            --warning-color: #ffb74d;
+            --info-color: #4dd0e1;
+            --background-color: #1e1e1e;
+            --surface-color: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: #444444;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         
         body {
-            background: linear-gradient(135deg, #ffffff, #f0f8ff, #fff0f5);
-            color: #333;
+            background: var(--background-color);
+            color: var(--text-primary);
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -23,31 +52,106 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             width: 100%;
-            background-color: #ffffff;
+            background-color: var(--background-color);
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             margin-top: 20px;
-            border: 2px solid #e3f2fd;
+            border: 2px solid var(--border-color);
         }
         
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
         h1 {
             text-align: center;
             margin-bottom: 10px;
             font-size: 2.8rem;
-            background: linear-gradient(45deg, #2196f3, #f44336);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .subtitle {
             text-align: center;
             margin-bottom: 30px;
-            color: #666;
+            color: var(--text-secondary);
             font-size: 1.1rem;
+        }
+        
+        .theme-switch {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: var(--surface-color);
+            border-radius: 25px;
+            border: 2px solid var(--border-color);
+        }
+
+        .theme-switch label {
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 25px;
         }
         
         .editor-container {
@@ -68,26 +172,26 @@
             align-items: center;
             margin-bottom: 10px;
             padding: 12px;
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            background: var(--surface-color);
             border-radius: 8px;
-            border-left: 4px solid #2196f3;
+            border-left: 4px solid var(--primary-color);
         }
         
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #1976d2;
+            color: var(--primary-color);
         }
         
         textarea {
             width: 100%;
             height: 250px;
             padding: 15px;
-            border: 2px solid #bbdefb;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
-            background-color: #fafafa;
-            color: #333;
+            background-color: var(--surface-color);
+            color: var(--text-primary);
             font-family: 'Courier New', monospace;
             font-size: 14px;
             resize: vertical;
@@ -96,37 +200,36 @@
         
         textarea:focus {
             outline: none;
-            border-color: #2196f3;
+            border-color: var(--primary-color);
             box-shadow: 0 0 10px rgba(33, 150, 243, 0.2);
-            background-color: #ffffff;
         }
         
         .buttons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
             margin-bottom: 25px;
         }
         
         button {
-            padding: 15px 20px;
+            padding: 12px 18px;
             border: none;
             border-radius: 8px;
-            background: linear-gradient(135deg, #2196f3, #1976d2);
+            background: linear-gradient(135deg, var(--primary-color), #1976d2);
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+            gap: 6px;
+            box-shadow: var(--shadow);
         }
         
         button:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
         }
         
@@ -135,149 +238,160 @@
         }
         
         #obfuscateBtn {
-            background: linear-gradient(135deg, #f44336, #d32f2f);
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
-        }
-        
-        #obfuscateBtn:hover {
-            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+            background: linear-gradient(135deg, var(--secondary-color), #d32f2f);
         }
         
         #deobfuscateBtn {
-            background: linear-gradient(135deg, #4caf50, #388e3c);
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-        }
-        
-        #deobfuscateBtn:hover {
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, var(--success-color), #388e3c);
         }
         
         #copyBtn {
-            background: linear-gradient(135deg, #ff9800, #f57c00);
-            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
-        }
-        
-        #copyBtn:hover {
-            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+            background: linear-gradient(135deg, var(--warning-color), #f57c00);
         }
         
         #executeBtn {
             background: linear-gradient(135deg, #9c27b0, #7b1fa2);
-            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
-        }
-        
-        #executeBtn:hover {
-            box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
         }
         
         #testObfuscatedBtn {
-            background: linear-gradient(135deg, #00bcd4, #0097a7);
-            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+            background: linear-gradient(135deg, var(--info-color), #0097a7);
         }
         
-        #testObfuscatedBtn:hover {
-            box-shadow: 0 6px 20px rgba(0, 188, 212, 0.4);
+        #saveProfileBtn {
+            background: linear-gradient(135deg, #795548, #5d4037);
         }
         
-        .result-group {
-            margin-top: 20px;
+        #loadProfileBtn {
+            background: linear-gradient(135deg, #607d8b, #455a64);
         }
         
-        .info {
-            background: linear-gradient(135deg, #f5f5f5, #e8eaf6);
-            border-radius: 8px;
+        #exportBtn {
+            background: linear-gradient(135deg, #ff5722, #d84315);
+        }
+        
+        #minifyBtn {
+            background: linear-gradient(135deg, #673ab7, #512da8);
+        }
+        
+        #beautifyBtn {
+            background: linear-gradient(135deg, #009688, #00796b);
+        }
+        
+        .sidebar {
+            background: var(--surface-color);
+            border-radius: 10px;
             padding: 20px;
-            margin-top: 25px;
-            font-size: 14px;
-            line-height: 1.6;
-            border-left: 4px solid #2196f3;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 2px solid var(--border-color);
         }
         
-        .info h3 {
+        .feature-section {
+            margin-bottom: 25px;
+        }
+        
+        .feature-section h3 {
+            color: var(--primary-color);
             margin-bottom: 15px;
-            color: #1976d2;
-            border-bottom: 2px solid #bbdefb;
             padding-bottom: 8px;
+            border-bottom: 2px solid var(--border-color);
         }
         
-        .info ul {
-            padding-left: 20px;
+        .feature-grid {
+            display: grid;
+            gap: 12px;
         }
         
-        .info li {
-            margin-bottom: 10px;
-            padding-left: 10px;
-            border-left: 3px solid #ff5252;
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--background-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary-color);
+        }
+        
+        .feature-item.active {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--surface-color), var(--background-color));
+        }
+        
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+            font-weight: bold;
         }
         
         .level-selector {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 20px;
             justify-content: center;
             flex-wrap: wrap;
         }
         
         .level-btn {
-            padding: 12px 24px;
+            padding: 10px 20px;
             border: 2px solid;
-            border-radius: 25px;
-            background: white;
+            border-radius: 20px;
+            background: var(--background-color);
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            box-shadow: var(--shadow);
         }
         
         .level-btn.medium {
-            border-color: #2196f3;
-            color: #2196f3;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
         }
         
         .level-btn.medium.active {
-            background: #2196f3;
+            background: var(--primary-color);
             color: white;
-            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
         }
         
         .level-btn.hard {
-            border-color: #ff9800;
-            color: #ff9800;
+            border-color: var(--warning-color);
+            color: var(--warning-color);
         }
         
         .level-btn.hard.active {
-            background: #ff9800;
+            background: var(--warning-color);
             color: white;
-            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
         }
         
         .level-btn.extreme {
-            border-color: #f44336;
-            color: #f44336;
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
         }
         
         .level-btn.extreme.active {
-            background: #f44336;
+            background: var(--secondary-color);
             color: white;
-            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
         }
         
         .level-btn.ultra {
             border-color: #9c27b0;
             color: #9c27b0;
-            animation: glow 2s infinite;
         }
         
         .level-btn.ultra.active {
             background: #9c27b0;
             color: white;
-            box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
-        }
-        
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3); }
-            50% { box-shadow: 0 6px 20px rgba(156, 39, 176, 0.6), 0 0 30px rgba(156, 39, 176, 0.4); }
         }
         
         .output-console {
@@ -291,7 +405,6 @@
             font-size: 14px;
             color: #eceff1;
             border: 2px solid #37474f;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
         }
         
         .console-header {
@@ -299,14 +412,14 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
-            color: #1976d2;
+            color: var(--primary-color);
             padding: 10px;
-            background: #e3f2fd;
+            background: var(--surface-color);
             border-radius: 6px;
         }
         
         #clearConsole {
-            background: #f44336;
+            background: var(--secondary-color);
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 12px;
@@ -320,10 +433,9 @@
             justify-content: space-around;
             margin: 20px 0;
             padding: 20px;
-            background: linear-gradient(135deg, #e3f2fd, #f5f5f5);
+            background: var(--surface-color);
             border-radius: 10px;
-            border: 2px solid #bbdefb;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 2px solid var(--border-color);
         }
         
         .stat-item {
@@ -332,14 +444,14 @@
         }
         
         .stat-value {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
-            color: #1976d2;
+            color: var(--primary-color);
         }
         
         .stat-label {
             font-size: 12px;
-            color: #666;
+            color: var(--text-secondary);
             font-weight: 600;
         }
         
@@ -366,10 +478,22 @@
             border: 2px solid #c8e6c9;
             font-weight: 600;
         }
+
+        [data-theme="dark"] .warning {
+            background: #3c1a1a;
+            border-color: #5d2b2b;
+            color: #ff8a8a;
+        }
+
+        [data-theme="dark"] .success {
+            background: #1a3c1a;
+            border-color: #2b5d2b;
+            color: #8aff8a;
+        }
         
         .feature-badge {
             display: inline-block;
-            background: #ff5252;
+            background: var(--secondary-color);
             color: white;
             padding: 4px 12px;
             border-radius: 20px;
@@ -378,11 +502,17 @@
             margin-left: 10px;
         }
         
-        @media (max-width: 900px) {
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
             .editor-container {
                 flex-direction: column;
             }
-            
+        }
+        
+        @media (max-width: 768px) {
             .buttons {
                 grid-template-columns: 1fr;
             }
@@ -395,28 +525,46 @@
                 flex-direction: column;
                 gap: 15px;
             }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>JavaScript Obfuscator</h1>
-    <p class="subtitle">Obfuscate kode JavaScript dengan tema putih-biru-merah yang modern</p>
-    
     <div class="container">
-        <div class="level-selector">
-            <button class="level-btn medium active" data-level="medium">MEDIUM</button>
-            <button class="level-btn hard" data-level="hard">HARD</button>
-            <button class="level-btn extreme" data-level="extreme">EXTREME</button>
-            <button class="level-btn ultra" data-level="ultra">ULTRA</button>
+        <div class="header">
+            <div>
+                <h1>Advanced JavaScript Obfuscator</h1>
+                <p class="subtitle">Obfuscate kode JavaScript dengan fitur lengkap + Dark/Light Mode</p>
+            </div>
+            <div class="theme-switch">
+                <label for="themeToggle">Dark Mode</label>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
         
-        <div class="editor-container">
-            <div class="editor-panel">
-                <div class="panel-header">
-                    <label for="inputCode">Kode JavaScript Asli:</label>
-                    <button id="loadExample" style="background: #4caf50; padding: 8px 16px; font-size: 14px;">Load Contoh</button>
+        <div class="main-layout">
+            <div class="main-content">
+                <div class="level-selector">
+                    <button class="level-btn medium active" data-level="medium">MEDIUM</button>
+                    <button class="level-btn hard" data-level="hard">HARD</button>
+                    <button class="level-btn extreme" data-level="extreme">EXTREME</button>
+                    <button class="level-btn ultra" data-level="ultra">ULTRA</button>
                 </div>
-                <textarea id="inputCode" placeholder="Masukkan kode JavaScript di sini...">// Contoh kode JavaScript yang akan diobfuscate
+                
+                <div class="editor-container">
+                    <div class="editor-panel">
+                        <div class="panel-header">
+                            <label for="inputCode">Kode JavaScript Asli:</label>
+                            <button id="loadExample" style="background: var(--success-color); padding: 8px 16px; font-size: 14px;">Load Contoh</button>
+                        </div>
+                        <textarea id="inputCode" placeholder="Masukkan kode JavaScript di sini...">// Contoh kode JavaScript yang akan diobfuscate
 function greet(name) {
     return "Halo, " + name + "! Selamat datang di obfuscator.";
 }
@@ -442,108 +590,213 @@ function testAll() {
 }
 
 testAll();</textarea>
+                    </div>
+                    
+                    <div class="editor-panel">
+                        <div class="panel-header">
+                            <label for="outputCode">Kode Hasil Obfuscation:</label>
+                            <span id="charCount" style="color: var(--text-secondary); font-weight: normal;">0 karakter</span>
+                        </div>
+                        <textarea id="outputCode" placeholder="Kode hasil obfuscation akan muncul di sini..." readonly></textarea>
+                    </div>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="originalSize">0</div>
+                        <div class="stat-label">UKURAN ASLI</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="obfuscatedSize">0</div>
+                        <div class="stat-label">UKURAN OBFUSCATED</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="ratio">0%</div>
+                        <div class="stat-label">KENAIKAN UKURAN</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="levelIndicator">MEDIUM</div>
+                        <div class="stat-label">LEVEL SAAT INI</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="performance">0ms</div>
+                        <div class="stat-label">WAKTU PROSES</div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button id="obfuscateBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        Obfuscate
+                    </button>
+                    <button id="deobfuscateBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        Deobfuscate
+                    </button>
+                    <button id="executeBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        Execute
+                    </button>
+                    <button id="testObfuscatedBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                        </svg>
+                        Test Obfuscated
+                    </button>
+                    <button id="copyBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Salin
+                    </button>
+                    <button id="minifyBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 9l-2 2m0 0l-2 2m2-2l2 2m-2-2l-2 2"></path>
+                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                        </svg>
+                        Minify
+                    </button>
+                    <button id="beautifyBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        </svg>
+                        Beautify
+                    </button>
+                    <button id="exportBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Export
+                    </button>
+                </div>
+                
+                <div class="console-header">
+                    <h3>Output Console:</h3>
+                    <button id="clearConsole">Bersihkan Console</button>
+                </div>
+                <div class="output-console" id="outputConsole"></div>
+                
+                <div class="success" id="successMessage" style="display: none;">
+                    ✅ SUCCESS: Kode berhasil diproses! Semua fitur berfungsi dengan baik.
+                </div>
+                
+                <div class="warning" id="ultraWarning" style="display: none;">
+                    ⚠️ PERINGATAN LEVEL ULTRA: Obfuscation ini menggunakan teknik advanced yang menghasilkan 
+                    kode sangat aman namun tetap executable. Proses mungkin memakan waktu beberapa detik.
+                </div>
             </div>
             
-            <div class="editor-panel">
-                <div class="panel-header">
-                    <label for="outputCode">Kode Hasil Obfuscation:</label>
-                    <span id="charCount" style="color: #666; font-weight: normal;">0 karakter</span>
+            <div class="sidebar">
+                <div class="feature-section">
+                    <h3>🎯 Fitur Obfuscation</h3>
+                    <div class="feature-grid">
+                        <div class="feature-item active" data-feature="rename">
+                            <div class="feature-icon">R</div>
+                            <span>Variable Renaming</span>
+                        </div>
+                        <div class="feature-item active" data-feature="string">
+                            <div class="feature-icon">S</div>
+                            <span>String Encoding</span>
+                        </div>
+                        <div class="feature-item" data-feature="control">
+                            <div class="feature-icon">C</div>
+                            <span>Control Flow</span>
+                        </div>
+                        <div class="feature-item" data-feature="deadcode">
+                            <div class="feature-icon">D</div>
+                            <span>Dead Code Injection</span>
+                        </div>
+                        <div class="feature-item active" data-feature="base64">
+                            <div class="feature-icon">B</div>
+                            <span>Base64 Encoding</span>
+                        </div>
+                        <div class="feature-item" data-feature="hex">
+                            <div class="feature-icon">H</div>
+                            <span>Hex Encoding</span>
+                        </div>
+                    </div>
                 </div>
-                <textarea id="outputCode" placeholder="Kode hasil obfuscation akan muncul di sini..." readonly></textarea>
+                
+                <div class="feature-section">
+                    <h3>⚡ Fitur Tambahan</h3>
+                    <div class="feature-grid">
+                        <div class="feature-item" data-tool="minify">
+                            <div class="feature-icon">M</div>
+                            <span>Code Minifier</span>
+                        </div>
+                        <div class="feature-item" data-tool="beautify">
+                            <div class="feature-icon">B</div>
+                            <span>Code Beautifier</span>
+                        </div>
+                        <div class="feature-item" data-tool="validator">
+                            <div class="feature-icon">V</div>
+                            <span>JS Validator</span>
+                        </div>
+                        <div class="feature-item" data-tool="performance">
+                            <div class="feature-icon">P</div>
+                            <span>Performance Test</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>💾 Profil & Export</h3>
+                    <div class="feature-grid">
+                        <button id="saveProfileBtn" style="width: 100%; margin-top: 5px;">
+                            💾 Save Profile
+                        </button>
+                        <button id="loadProfileBtn" style="width: 100%; margin-top: 5px;">
+                            📂 Load Profile
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-value" id="originalSize">0</div>
-                <div class="stat-label">UKURAN ASLI</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="obfuscatedSize">0</div>
-                <div class="stat-label">UKURAN OBFUSCATED</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="ratio">0%</div>
-                <div class="stat-label">KENAIKAN UKURAN</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="levelIndicator">MEDIUM</div>
-                <div class="stat-label">LEVEL SAAT INI</div>
-            </div>
-        </div>
-        
-        <div class="buttons">
-            <button id="obfuscateBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-                Obfuscate Code
-            </button>
-            <button id="executeBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                </svg>
-                Execute Original
-            </button>
-            <button id="testObfuscatedBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                </svg>
-                Test Obfuscated
-            </button>
-            <button id="copyBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-                Salin Kode
-            </button>
-        </div>
-        
-        <div class="console-header">
-            <h3>Output Console:</h3>
-            <button id="clearConsole">Bersihkan Console</button>
-        </div>
-        <div class="output-console" id="outputConsole"></div>
-        
-        <div class="success" id="successMessage" style="display: none;">
-            ✅ SUCCESS: Kode berhasil diobfuscate dan bisa dijalankan! Semua level berfungsi dengan baik.
-        </div>
-        
-        <div class="warning" id="ultraWarning" style="display: none;">
-            ⚠️ PERINGATAN LEVEL ULTRA: Obfuscation ini menggunakan teknik advanced yang menghasilkan 
-            kode sangat aman namun tetap executable. Proses mungkin memakan waktu beberapa detik.
-        </div>
-        
-        <div class="info">
-            <h3>🎯 Fitur Obfuscator <span class="feature-badge">NEW</span></h3>
-            <ul>
-                <li><strong style="color: #2196f3;">Variable Renaming</strong> - Mengganti nama variabel dan fungsi dengan nama acak</li>
-                <li><strong style="color: #f44336;">String Encoding</strong> - Mengenkripsi string literal dalam kode</li>
-                <li><strong style="color: #ff9800;">Control Flow Obfuscation</strong> - Mengubah struktur kontrol flow program</li>
-                <li><strong style="color: #9c27b0;">Multiple Encoding Layers</strong> - Beberapa lapis encoding untuk keamanan maksimal</li>
-                <li><strong style="color: #00bcd4;">Anti-Debug Protection</strong> - Fitur untuk mengelabui debugger dan analyzer</li>
-                <li><strong style="color: #4caf50;">Code Execution</strong> - Kode hasil obfuscation tetap bisa dijalankan</li>
-            </ul>
-            <p style="margin-top: 15px; color: #666; font-style: italic;">
-                <strong>Note:</strong> Semua level dari Medium sampai Ultra telah di-test dan berfungsi dengan baik. 
-                Kode hasil obfuscation tetap mempertahankan fungsionalitas aslinya.
-            </p>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            themeToggle.checked = currentTheme === 'dark';
+            
+            themeToggle.addEventListener('change', function() {
+                const theme = this.checked ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            });
+
+            // Existing functionality
             const inputCode = document.getElementById('inputCode');
             const outputCode = document.getElementById('outputCode');
             const obfuscateBtn = document.getElementById('obfuscateBtn');
+            const deobfuscateBtn = document.getElementById('deobfuscateBtn');
             const copyBtn = document.getElementById('copyBtn');
             const executeBtn = document.getElementById('executeBtn');
             const testObfuscatedBtn = document.getElementById('testObfuscatedBtn');
+            const minifyBtn = document.getElementById('minifyBtn');
+            const beautifyBtn = document.getElementById('beautifyBtn');
+            const exportBtn = document.getElementById('exportBtn');
+            const saveProfileBtn = document.getElementById('saveProfileBtn');
+            const loadProfileBtn = document.getElementById('loadProfileBtn');
             const loadExampleBtn = document.getElementById('loadExample');
             const clearConsoleBtn = document.getElementById('clearConsole');
             const outputConsole = document.getElementById('outputConsole');
             const levelButtons = document.querySelectorAll('.level-btn');
+            const featureItems = document.querySelectorAll('.feature-item');
             const charCount = document.getElementById('charCount');
             const ultraWarning = document.getElementById('ultraWarning');
             const successMessage = document.getElementById('successMessage');
@@ -553,8 +806,10 @@ testAll();</textarea>
             const obfuscatedSizeEl = document.getElementById('obfuscatedSize');
             const ratioEl = document.getElementById('ratio');
             const levelIndicatorEl = document.getElementById('levelIndicator');
+            const performanceEl = document.getElementById('performance');
             
             let currentLevel = 'medium';
+            let activeFeatures = new Set(['rename', 'string', 'base64']);
             
             // Contoh kode JavaScript
             const exampleCode = `// Contoh kode JavaScript yang akan diobfuscate
@@ -584,6 +839,21 @@ function testAll() {
 
 testAll();`;
             
+            // Feature toggle
+            featureItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (this.classList.contains('active')) {
+                        this.classList.remove('active');
+                        const feature = this.getAttribute('data-feature') || this.getAttribute('data-tool');
+                        if (feature) activeFeatures.delete(feature);
+                    } else {
+                        this.classList.add('active');
+                        const feature = this.getAttribute('data-feature') || this.getAttribute('data-tool');
+                        if (feature) activeFeatures.add(feature);
+                    }
+                });
+            });
+            
             // Level selection
             levelButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -592,7 +862,6 @@ testAll();`;
                     currentLevel = this.getAttribute('data-level');
                     levelIndicatorEl.textContent = currentLevel.toUpperCase();
                     
-                    // Tampilkan peringatan untuk level ultra
                     if (currentLevel === 'ultra') {
                         ultraWarning.style.display = 'block';
                     } else {
@@ -615,344 +884,35 @@ testAll();`;
                 return btoa(unescape(encodeURIComponent(str)));
             }
             
-            function base64Decode(str) {
-                try {
-                    return decodeURIComponent(escape(atob(str)));
-                } catch (e) {
-                    return str;
-                }
+            // Minify function
+            function minifyCode(code) {
+                return code
+                    .replace(/\/\/.*$/gm, '') // Remove single line comments
+                    .replace(/\/\*[\s\S]*?\*\//g, '') // Remove multi-line comments
+                    .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+                    .replace(/\s*([=+\-*\/<>!]?=)\s*/g, '$1') // Remove spaces around operators
+                    .replace(/, /g, ',') // Remove spaces after commas
+                    .replace(/; /g, ';') // Remove spaces after semicolons
+                    .replace(/\s*{\s*/g, '{') // Format braces
+                    .replace(/\s*}\s*/g, '}')
+                    .trim();
             }
             
-            function stringToHex(str) {
-                let hex = '';
-                for (let i = 0; i < str.length; i++) {
-                    hex += str.charCodeAt(i).toString(16).padStart(2, '0');
-                }
-                return hex;
-            }
-            
-            function hexToString(hex) {
-                let str = '';
-                for (let i = 0; i < hex.length; i += 2) {
-                    str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-                }
-                return str;
-            }
-            
-            // Medium obfuscation
-            function mediumObfuscate(code) {
+            // Beautify function
+            function beautifyCode(code) {
                 let result = code;
-                const varMap = new Map();
+                let indentLevel = 0;
+                const lines = code.split('\n');
+                const beautified = [];
                 
-                const varRegex = /(?:var|let|const|function)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
-                let match;
-                while ((match = varRegex.exec(result)) !== null) {
-                    const varName = match[1];
-                    if (!varMap.has(varName) && varName.length > 2 && 
-                        !['console', 'log', 'eval', 'function'].includes(varName)) {
-                        varMap.set(varName, '_' + generateRandomName());
-                    }
-                }
-                
-                varMap.forEach((newName, oldName) => {
-                    const regex = new RegExp('\\b' + oldName + '\\b', 'g');
-                    result = result.replace(regex, newName);
-                });
-                
-                return result;
-            }
-            
-            // Hard obfuscation
-            function hardObfuscate(code) {
-                let result = mediumObfuscate(code);
-                
-                const stringRegex = /"([^"\\]*(\\.[^"\\]*)*)"|'([^'\\]*(\\.[^'\\]*)*)'/g;
-                result = result.replace(stringRegex, (match, p1, p2, p3) => {
-                    const content = p1 || p3;
-                    if (content && content.length > 3 && !content.includes('\\') && !content.includes('${')) {
-                        return `(function(){return atob('${btoa(content)}')})()`;
-                    }
-                    return match;
-                });
-                
-                return result;
-            }
-            
-            // Extreme obfuscation
-            function extremeObfuscate(code) {
-                let result = hardObfuscate(code);
-                const encoded = base64Encode(result);
-                const randomKey = generateRandomName(8);
-                
-                result = `
-                (function(){
-                    try {
-                        var _k='${randomKey}';
-                        var _e='${encoded}';
-                        var _d=atob(_e);
-                        eval(_d);
-                    } catch(e) {
-                        console.error('Execution error:', e);
-                    }
-                })();
-                `;
-                
-                return result;
-            }
-            
-            // ULTRA obfuscation
-            function ultraObfuscate(code) {
-                let layer1 = base64Encode(code);
-                let layer2 = stringToHex(layer1);
-                let layer3 = base64Encode(layer2);
-                
-                const xorKey = generateRandomName(12);
-                let encrypted = '';
-                for (let i = 0; i < layer3.length; i++) {
-                    encrypted += String.fromCharCode(layer3.charCodeAt(i) ^ xorKey.charCodeAt(i % xorKey.length));
-                }
-                let finalEncoded = btoa(encrypted);
-                
-                const decoderFunc = generateRandomName();
-                const dataVar = generateRandomName();
-                const keyVar = generateRandomName();
-                
-                result = `
-                /* 🚀 ULTRA OBFUSCATED CODE - LEVEL MAXIMUM 🚀 */
-                (function(){
-                    'use strict';
+                lines.forEach(line => {
+                    const trimmed = line.trim();
+                    if (trimmed === '') return;
                     
-                    function ${decoderFunc}(d, k) {
-                        var r = '';
-                        for (var i = 0; i < d.length; i++) {
-                            r += String.fromCharCode(d.charCodeAt(i) ^ k.charCodeAt(i % k.length));
-                        }
-                        return r;
+                    if (trimmed.endsWith('}') || trimmed.endsWith('};')) {
+                        indentLevel = Math.max(0, indentLevel - 1);
                     }
                     
-                    var ${dataVar} = '${finalEncoded}';
-                    var ${keyVar} = '${xorKey}';
+                    beautified.push('  '.repeat(indentLevel) + trimmed);
                     
-                    try {
-                        var step1 = atob(${dataVar});
-                        var step2 = ${decoderFunc}(step1, ${keyVar});
-                        var step3 = atob(step2);
-                        var step4 = hexToString(step3);
-                        var finalCode = atob(step4);
-                        eval(finalCode);
-                    } catch(e) {
-                        console.log('Ultra obfuscated code executed with minor issues');
-                        try {
-                            ${code}
-                        } catch(e2) {
-                            console.error('Fallback also failed:', e2);
-                        }
-                    }
-                    
-                    function hexToString(hex) {
-                        var str = '';
-                        for (var i = 0; i < hex.length; i += 2) {
-                            str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-                        }
-                        return str;
-                    }
-                })();
-                `;
-                
-                return result;
-            }
-            
-            function executeCode(code, isObfuscated = false) {
-                successMessage.style.display = 'none';
-                
-                try {
-                    const originalConsoleLog = console.log;
-                    const originalConsoleError = console.error;
-                    
-                    console.log = function(...args) {
-                        originalConsoleLog.apply(console, args);
-                        
-                        const output = args.map(arg => {
-                            if (typeof arg === 'object') {
-                                try {
-                                    return JSON.stringify(arg, null, 2);
-                                } catch (e) {
-                                    return String(arg);
-                                }
-                            }
-                            return String(arg);
-                        }).join(' ');
-                        
-                        const outputLine = document.createElement('div');
-                        if (isObfuscated) {
-                            outputLine.style.color = '#ff9800';
-                            outputLine.textContent = '[OBFUSCATED] > ' + output;
-                        } else {
-                            outputLine.textContent = '> ' + output;
-                        }
-                        outputConsole.appendChild(outputLine);
-                        outputConsole.scrollTop = outputConsole.scrollHeight;
-                    };
-                    
-                    console.error = function(...args) {
-                        originalConsoleError.apply(console, args);
-                        
-                        const errorLine = document.createElement('div');
-                        errorLine.style.color = '#f44336';
-                        errorLine.textContent = '> ERROR: ' + args.join(' ');
-                        outputConsole.appendChild(errorLine);
-                        outputConsole.scrollTop = outputConsole.scrollHeight;
-                    };
-                    
-                    eval(code);
-                    
-                    if (isObfuscated) {
-                        successMessage.style.display = 'block';
-                    }
-                    
-                    setTimeout(() => {
-                        console.log = originalConsoleLog;
-                        console.error = originalConsoleError;
-                    }, 1000);
-                    
-                } catch (error) {
-                    const errorLine = document.createElement('div');
-                    errorLine.style.color = '#f44336';
-                    errorLine.textContent = '> RUNTIME ERROR: ' + error.message;
-                    outputConsole.appendChild(errorLine);
-                    outputConsole.scrollTop = outputConsole.scrollHeight;
-                }
-            }
-            
-            // Update stats
-            function updateStats(original, obfuscated) {
-                const originalSize = original.length;
-                const obfuscatedSize = obfuscated.length;
-                const increaseRatio = originalSize > 0 ? ((obfuscatedSize - originalSize) / originalSize * 100).toFixed(1) : '0';
-                
-                originalSizeEl.textContent = originalSize;
-                obfuscatedSizeEl.textContent = obfuscatedSize;
-                ratioEl.textContent = increaseRatio + '%';
-                
-                if (increaseRatio > 200) {
-                    ratioEl.style.color = '#f44336';
-                } else if (increaseRatio > 100) {
-                    ratioEl.style.color = '#ff9800';
-                } else {
-                    ratioEl.style.color = '#4caf50';
-                }
-            }
-            
-            // Update karakter count
-            function updateCharCount() {
-                charCount.textContent = outputCode.value.length + ' karakter';
-            }
-            
-            // Event listeners
-            obfuscateBtn.addEventListener('click', function() {
-                const code = inputCode.value.trim();
-                if (!code) {
-                    outputCode.value = "Masukkan kode JavaScript terlebih dahulu!";
-                    return;
-                }
-                
-                try {
-                    let obfuscatedCode;
-                    const startTime = performance.now();
-                    
-                    switch(currentLevel) {
-                        case 'medium':
-                            obfuscatedCode = mediumObfuscate(code);
-                            break;
-                        case 'hard':
-                            obfuscatedCode = hardObfuscate(code);
-                            break;
-                        case 'extreme':
-                            obfuscatedCode = extremeObfuscate(code);
-                            break;
-                        case 'ultra':
-                            obfuscatedCode = ultraObfuscate(code);
-                            break;
-                        default:
-                            obfuscatedCode = mediumObfuscate(code);
-                    }
-                    
-                    const endTime = performance.now();
-                    outputCode.value = obfuscatedCode;
-                    updateCharCount();
-                    updateStats(code, obfuscatedCode);
-                    
-                    const timeLine = document.createElement('div');
-                    timeLine.style.color = '#00bcd4';
-                    timeLine.textContent = `> Obfuscation completed in ${(endTime - startTime).toFixed(2)}ms (Level: ${currentLevel.toUpperCase()})`;
-                    outputConsole.appendChild(timeLine);
-                    outputConsole.scrollTop = outputConsole.scrollHeight;
-                    
-                } catch (error) {
-                    outputCode.value = "Terjadi error saat obfuscation: " + error.message;
-                    const errorLine = document.createElement('div');
-                    errorLine.style.color = '#f44336';
-                    errorLine.textContent = '> OBFUSCATION ERROR: ' + error.message;
-                    outputConsole.appendChild(errorLine);
-                }
-            });
-            
-            executeBtn.addEventListener('click', function() {
-                const codeToExecute = inputCode.value;
-                if (!codeToExecute.trim()) {
-                    const errorLine = document.createElement('div');
-                    errorLine.style.color = '#f44336';
-                    errorLine.textContent = '> Error: Tidak ada kode untuk dijalankan';
-                    outputConsole.appendChild(errorLine);
-                    return;
-                }
-                
-                executeCode(codeToExecute, false);
-            });
-            
-            testObfuscatedBtn.addEventListener('click', function() {
-                const codeToExecute = outputCode.value;
-                if (!codeToExecute.trim()) {
-                    const errorLine = document.createElement('div');
-                    errorLine.style.color = '#f44336';
-                    errorLine.textContent = '> Error: Tidak ada kode obfuscated untuk dijalankan';
-                    outputConsole.appendChild(errorLine);
-                    return;
-                }
-                
-                executeCode(codeToExecute, true);
-            });
-            
-            copyBtn.addEventListener('click', function() {
-                if (!outputCode.value) return;
-                
-                outputCode.select();
-                document.execCommand('copy');
-                
-                const originalText = copyBtn.innerHTML;
-                copyBtn.innerHTML = '✓ Tersalin!';
-                copyBtn.style.background = '#4caf50';
-                
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalText;
-                    copyBtn.style.background = '';
-                }, 2000);
-            });
-            
-            loadExampleBtn.addEventListener('click', function() {
-                inputCode.value = exampleCode;
-            });
-            
-            clearConsoleBtn.addEventListener('click', function() {
-                outputConsole.innerHTML = '';
-                successMessage.style.display = 'none';
-            });
-            
-            // Inisialisasi
-            updateCharCount();
-            updateStats('', '');
-            inputCode.value = exampleCode;
-        });
-    </script>
-</body>
-</html>
+                    if (trimmed.endsWith('{') || trimmed.endsWith('{
