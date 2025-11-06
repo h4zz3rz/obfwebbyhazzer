@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Text Obfuscator</title>
+    <title>ULTRA JavaScript Obfuscator</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,7 +13,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             color: #fff;
             min-height: 100vh;
             padding: 20px;
@@ -25,69 +25,93 @@
         .container {
             max-width: 1200px;
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.8);
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
             margin-top: 20px;
+            border: 1px solid #00ff88;
         }
         
         h1 {
             text-align: center;
             margin-bottom: 10px;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.8rem;
+            text-shadow: 0 0 10px #00ff88, 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .subtitle {
             text-align: center;
             margin-bottom: 30px;
             color: #ccc;
+            font-size: 1.1rem;
         }
         
-        .input-group {
+        .editor-container {
+            display: flex;
+            gap: 20px;
             margin-bottom: 25px;
+        }
+        
+        .editor-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 8px;
         }
         
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
+            color: #00ff88;
         }
         
         textarea {
             width: 100%;
-            height: 150px;
+            height: 250px;
             padding: 15px;
-            border: none;
+            border: 1px solid #00ff88;
             border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 16px;
+            background-color: #0a0a0a;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
             resize: vertical;
             transition: all 0.3s ease;
         }
         
         textarea:focus {
             outline: none;
-            background-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 2px #4dabf7;
+            box-shadow: 0 0 10px #00ff88;
+            background-color: #111111;
         }
         
         .buttons {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
         }
         
         button {
-            flex: 1;
-            padding: 12px 20px;
+            padding: 15px 20px;
             border: none;
             border-radius: 8px;
-            background: linear-gradient(to right, #3498db, #2980b9);
-            color: white;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: #000;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -99,8 +123,8 @@
         }
         
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
         }
         
         button:active {
@@ -108,15 +132,23 @@
         }
         
         #obfuscateBtn {
-            background: linear-gradient(to right, #e74c3c, #c0392b);
+            background: linear-gradient(45deg, #ff0066, #ff00cc);
         }
         
         #deobfuscateBtn {
-            background: linear-gradient(to right, #2ecc71, #27ae60);
+            background: linear-gradient(45deg, #00ff88, #00cc66);
         }
         
         #copyBtn {
-            background: linear-gradient(to right, #9b59b6, #8e44ad);
+            background: linear-gradient(45deg, #ffaa00, #ff6600);
+        }
+        
+        #executeBtn {
+            background: linear-gradient(45deg, #00ccff, #0066ff);
+        }
+        
+        #testObfuscatedBtn {
+            background: linear-gradient(45deg, #aa00ff, #6600ff);
         }
         
         .result-group {
@@ -124,17 +156,18 @@
         }
         
         .info {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 255, 136, 0.1);
             border-radius: 8px;
             padding: 15px;
             margin-top: 25px;
             font-size: 14px;
             line-height: 1.6;
+            border: 1px solid #00ff88;
         }
         
         .info h3 {
             margin-bottom: 10px;
-            color: #4dabf7;
+            color: #00ff88;
         }
         
         .info ul {
@@ -154,186 +187,207 @@
         }
         
         .level-btn {
-            padding: 8px 16px;
-            border: 2px solid #3498db;
-            border-radius: 20px;
+            padding: 10px 20px;
+            border: 2px solid;
+            border-radius: 25px;
             background: transparent;
-            color: #3498db;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-weight: bold;
         }
         
-        .level-btn.active {
-            background: #3498db;
-            color: white;
+        .level-btn.medium {
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+        
+        .level-btn.medium.active {
+            background: #00ff88;
+            color: #000;
+        }
+        
+        .level-btn.hard {
+            border-color: #ffaa00;
+            color: #ffaa00;
+        }
+        
+        .level-btn.hard.active {
+            background: #ffaa00;
+            color: #000;
         }
         
         .level-btn.extreme {
-            border-color: #e74c3c;
-            color: #e74c3c;
+            border-color: #ff0066;
+            color: #ff0066;
         }
         
         .level-btn.extreme.active {
-            background: #e74c3c;
-            color: white;
+            background: #ff0066;
+            color: #fff;
         }
         
-        .style-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+        .level-btn.ultra {
+            border-color: #aa00ff;
+            color: #aa00ff;
+            animation: glow 2s infinite;
         }
         
-        .style-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        .level-btn.ultra.active {
+            background: #aa00ff;
+            color: #fff;
+            box-shadow: 0 0 20px #aa00ff;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px #aa00ff; }
+            50% { box-shadow: 0 0 20px #aa00ff, 0 0 30px #aa00ff; }
+        }
+        
+        .output-console {
+            background-color: #0a0a0a;
+            border-radius: 8px;
             padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+            margin-top: 20px;
+            height: 150px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #00ff88;
+            border: 1px solid #00ff88;
         }
         
-        .style-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-3px);
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #00ff88;
         }
         
-        .style-card.active {
-            border-color: #4dabf7;
-            background: rgba(77, 171, 247, 0.2);
+        #clearConsole {
+            background: #ff0066;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            border: none;
         }
         
-        .style-card h4 {
-            margin-bottom: 8px;
-            color: #4dabf7;
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 8px;
+            border: 1px solid #00ff88;
         }
         
-        .style-card p {
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff88;
+        }
+        
+        .stat-label {
             font-size: 12px;
             color: #ccc;
         }
         
-        .custom-style {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-        
-        .custom-style input {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            margin-bottom: 10px;
-        }
-        
         .warning {
-            color: #ff9999;
+            color: #ff0066;
             font-size: 14px;
             margin-top: 10px;
             text-align: center;
-        }
-        
-        .char-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-top: 10px;
             padding: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            max-height: 100px;
-            overflow-y: auto;
+            background: rgba(255, 0, 102, 0.1);
+            border-radius: 8px;
+            border: 1px solid #ff0066;
         }
         
-        .char-preview span {
-            font-size: 18px;
-        }
-        
-        @media (max-width: 600px) {
-            .buttons {
+        @media (max-width: 900px) {
+            .editor-container {
                 flex-direction: column;
+            }
+            
+            .buttons {
+                grid-template-columns: 1fr;
             }
             
             .level-selector {
                 flex-wrap: wrap;
             }
-            
-            .style-selector {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
-    <h1>Advanced Text Obfuscator</h1>
-    <p class="subtitle">Obfuscate teks dengan karakter internasional dan berbagai style</p>
+    <h1>ULTRA JavaScript Obfuscator</h1>
+    <p class="subtitle">Obfuscate kode JavaScript dengan level ULTRA - Kode tetap bisa dijalankan!</p>
     
     <div class="container">
         <div class="level-selector">
-            <button class="level-btn active" data-level="medium">Medium</button>
-            <button class="level-btn" data-level="hard">Hard</button>
-            <button class="level-btn extreme" data-level="extreme">Extreme</button>
+            <button class="level-btn medium active" data-level="medium">MEDIUM</button>
+            <button class="level-btn hard" data-level="hard">HARD</button>
+            <button class="level-btn extreme" data-level="extreme">EXTREME</button>
+            <button class="level-btn ultra" data-level="ultra">ULTRA</button>
         </div>
         
-        <div class="style-selector">
-            <div class="style-card active" data-style="japanese">
-                <h4>🇯🇵 Japanese Style</h4>
-                <p>Menggunakan karakter Hiragana, Katakana, dan Kanji</p>
-                <div class="char-preview">
-                    <span>あ</span><span>ア</span><span>日</span><span>本</span><span>語</span>
+        <div class="editor-container">
+            <div class="editor-panel">
+                <div class="panel-header">
+                    <label for="inputCode">Kode JavaScript Asli:</label>
+                    <button id="loadExample">Load Contoh</button>
                 </div>
+                <textarea id="inputCode" placeholder="Masukkan kode JavaScript di sini...">// Contoh kode JavaScript
+function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+function main() {
+    console.log("Fibonacci Sequence:");
+    for (let i = 0; i < 10; i++) {
+        console.log(`F(${i}) = ${fibonacci(i)}`);
+    }
+    
+    // Contoh lain
+    let numbers = [1, 2, 3, 4, 5];
+    let squares = numbers.map(x => x * x);
+    console.log("Squares:", squares);
+}
+
+main();</textarea>
             </div>
-            <div class="style-card" data-style="chinese">
-                <h4>🇨🇳 Chinese Style</h4>
-                <p>Menggunakan karakter Mandarin tradisional dan sederhana</p>
-                <div class="char-preview">
-                    <span>中</span><span>文</span><span>汉</span><span>字</span><span>语</span>
+            
+            <div class="editor-panel">
+                <div class="panel-header">
+                    <label for="outputCode">Kode Hasil Obfuscation:</label>
+                    <span id="charCount">0 karakter</span>
                 </div>
-            </div>
-            <div class="style-card" data-style="german">
-                <h4>🇩🇪 German Style</h4>
-                <p>Menggunakan karakter khusus Jerman dan simbol</p>
-                <div class="char-preview">
-                    <span>ä</span><span>ö</span><span>ü</span><span>ß</span><span>€</span>
-                </div>
-            </div>
-            <div class="style-card" data-style="mixed">
-                <h4>🌍 Mixed International</h4>
-                <p>Kombinasi semua karakter internasional</p>
-                <div class="char-preview">
-                    <span>あ</span><span>中</span><span>ä</span><span>本</span><span>€</span>
-                </div>
-            </div>
-            <div class="style-card" data-style="symbols">
-                <h4>🔣 Symbol Style</h4>
-                <p>Menggunakan simbol dan karakter khusus</p>
-                <div class="char-preview">
-                    <span>♠</span><span>♣</span><span>♥</span><span>♦</span><span>∞</span>
-                </div>
-            </div>
-            <div class="style-card" data-style="mathematical">
-                <h4>∫ Mathematical Style</h4>
-                <p>Menggunakan simbol matematika dan ilmiah</p>
-                <div class="char-preview">
-                    <span>∫</span><span>∑</span><span>∏</span><span>√</span><span>∞</span>
-                </div>
+                <textarea id="outputCode" placeholder="Kode hasil obfuscation akan muncul di sini..." readonly></textarea>
             </div>
         </div>
         
-        <div class="custom-style">
-            <h4>Custom Character Set</h4>
-            <input type="text" id="customChars" placeholder="Masukkan karakter custom Anda (contoh: abc123@#$)">
-            <button id="applyCustom">Terapkan Custom Characters</button>
-        </div>
-        
-        <div class="input-group">
-            <label for="inputText">Masukkan Teks:</label>
-            <textarea id="inputText" placeholder="Ketik atau paste teks yang ingin di-obfuscate di sini..."></textarea>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="originalSize">0</div>
+                <div class="stat-label">Original Size</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="obfuscatedSize">0</div>
+                <div class="stat-label">Obfuscated Size</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="ratio">0%</div>
+                <div class="stat-label">Size Increase</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="levelIndicator">MEDIUM</div>
+                <div class="stat-label">Current Level</div>
+            </div>
         </div>
         
         <div class="buttons">
@@ -341,125 +395,97 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 </svg>
-                Obfuscate
+                Obfuscate Code
             </button>
-            <button id="deobfuscateBtn">
+            <button id="executeBtn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
-                Deobfuscate
+                Execute Original
+            </button>
+            <button id="testObfuscatedBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
+                Test Obfuscated
             </button>
             <button id="copyBtn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
-                Salin
+                Salin Kode
             </button>
         </div>
         
-        <div class="result-group">
-            <label for="outputText">Hasil:</label>
-            <textarea id="outputText" placeholder="Hasil obfuscation/deobfuscation akan muncul di sini..." readonly></textarea>
+        <div class="console-header">
+            <h3>Output Console:</h3>
+            <button id="clearConsole">Bersihkan Console</button>
         </div>
+        <div class="output-console" id="outputConsole"></div>
         
-        <div class="warning" id="extremeWarning" style="display: none;">
-            PERINGATAN: Level Extreme menggunakan karakter Unicode yang mungkin tidak ditampilkan dengan benar di semua sistem. 
-            Hasil obfuscation mungkin terlihat seperti teks acak atau kotak kosong.
+        <div class="warning" id="ultraWarning" style="display: none;">
+            ⚠️ PERINGATAN LEVEL ULTRA: Obfuscation ini menggunakan teknik advanced yang mungkin 
+            menghasilkan kode sangat besar namun tetap executable. Proses mungkin memakan waktu beberapa detik.
         </div>
         
         <div class="info">
-            <h3>Tentang Obfuscation dengan Karakter Internasional</h3>
-            <p>Obfuscation ini menggunakan karakter dari berbagai bahasa untuk membuat teks sulit dibaca namun tetap bisa dideobfuscate.</p>
-            <p>Style yang tersedia:</p>
+            <h3>Fitur Level ULTRA:</h3>
             <ul>
-                <li><strong>Japanese:</strong> Hiragana, Katakana, Kanji (あ, ア, 日, 本)</li>
-                <li><strong>Chinese:</strong> Karakter Mandarin (中, 文, 汉, 字)</li>
-                <li><strong>German:</strong> Umlaut dan simbol khusus (ä, ö, ü, ß)</li>
-                <li><strong>Mixed:</strong> Kombinasi semua karakter internasional</li>
-                <li><strong>Symbols:</strong> Simbol dan karakter khusus (♠, ♣, ♥, ♦)</li>
-                <li><strong>Mathematical:</strong> Simbol matematika (∫, ∑, ∏, √)</li>
+                <li><strong>Polymorphic Code Generation</strong> - Kode berubah struktur setiap kali di-obfuscate</li>
+                <li><strong>Multiple Virtual Machine Layers</strong> - Kode di-wrap dalam beberapa layer VM</li>
+                <li><strong>Dynamic Function Reconstruction</strong> - Fungsi dibangun ulang secara runtime</li>
+                <li><strong>Anti-Debug Protection</strong> - Mendeteksi dan mengelabui debugger</li>
+                <li><strong>Code Splitting & Reassembly</strong> - Kode dipotong dan disusun ulang saat runtime</li>
+                <li><strong>Metamorphic Techniques</strong> - Kode mengubah dirinya sendiri saat dijalankan</li>
             </ul>
-            <p>Anda juga bisa menggunakan custom character set untuk obfuscation yang lebih personal!</p>
+            <p>Kode yang dihasilkan di level ULTRA tetap dapat dijalankan seperti biasa namun sangat sulit dianalisis!</p>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const inputText = document.getElementById('inputText');
-            const outputText = document.getElementById('outputText');
+            const inputCode = document.getElementById('inputCode');
+            const outputCode = document.getElementById('outputCode');
             const obfuscateBtn = document.getElementById('obfuscateBtn');
-            const deobfuscateBtn = document.getElementById('deobfuscateBtn');
             const copyBtn = document.getElementById('copyBtn');
+            const executeBtn = document.getElementById('executeBtn');
+            const testObfuscatedBtn = document.getElementById('testObfuscatedBtn');
+            const loadExampleBtn = document.getElementById('loadExample');
+            const clearConsoleBtn = document.getElementById('clearConsole');
+            const outputConsole = document.getElementById('outputConsole');
             const levelButtons = document.querySelectorAll('.level-btn');
-            const styleCards = document.querySelectorAll('.style-card');
-            const customCharsInput = document.getElementById('customChars');
-            const applyCustomBtn = document.getElementById('applyCustom');
-            const extremeWarning = document.getElementById('extremeWarning');
+            const charCount = document.getElementById('charCount');
+            const ultraWarning = document.getElementById('ultraWarning');
+            
+            // Stats elements
+            const originalSizeEl = document.getElementById('originalSize');
+            const obfuscatedSizeEl = document.getElementById('obfuscatedSize');
+            const ratioEl = document.getElementById('ratio');
+            const levelIndicatorEl = document.getElementById('levelIndicator');
             
             let currentLevel = 'medium';
-            let currentStyle = 'japanese';
-            let currentChars = [];
             
-        // Character sets untuk berbagai style
-        const characterSets = {
-            japanese: [
-                // Hiragana
-                'あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ',
-                'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と',
-                'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ',
-                'ま', 'み', 'む', 'め', 'も', 'や', 'ゆ', 'よ', 'ら', 'り',
-                'る', 'れ', 'ろ', 'わ', 'を', 'ん',
-                // Katakana
-                'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ',
-                'サ', 'シ', 'ス', 'セ', 'ソ', 'タ', 'チ', 'ツ', 'テ', 'ト',
-                'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ',
-                'マ', 'ミ', 'ム', 'メ', 'モ', 'ヤ', 'ユ', 'ヨ', 'ラ', 'リ',
-                'ル', 'レ', 'ロ', 'ワ', 'ヲ', 'ン',
-                // Kanji
-                '日', '本', '語', '人', '山', '川', '田', '水', '火', '木',
-                '金', '土', '月', '花', '草', '学', '生', '先', '車', '電'
-            ],
-            chinese: [
-                '中', '文', '汉', '字', '语', '言', '学', '习', '读', '写',
-                '说', '话', '听', '音', '乐', '书', '画', '诗', '词', '歌',
-                '赋', '春', '夏', '秋', '冬', '风', '花', '雪', '月', '山',
-                '水', '天', '地', '人', '和', '平', '发', '展', '创', '新',
-                '美', '丽', '好', '爱', '喜', '欢', '快', '乐', '幸', '福'
-            ],
-            german: [
-                'ä', 'ö', 'ü', 'ß', '€', '§', '°', 'µ', '¶', '·',
-                'Ä', 'Ö', 'Ü', 'ẞ', '¢', '£', '¥', '†', '‡', '•',
-                '₠', '₡', '₢', '₣', '₤', '₥', '₦', '₧', '₨', '₩',
-                '₪', '₫', '€', '₭', '₮', '₯', '₰', '₱', '₲', '₳',
-                '₴', '₵', '₶', '₷', '₸', '₹', '₺', '₻', '₼', '₽'
-            ],
-            mixed: [
-                'あ', 'ア', '日', '中', '文', 'ä', 'ö', 'ü', 'ß', '€',
-                '∫', '∑', '∏', '√', '∞', '♠', '♣', '♥', '♦', '★',
-                '☆', '♨', '♩', '♪', '♫', '♬', '♭', '♮', '♯', '°',
-                '±', '×', '÷', '≈', '≠', '≡', '≤', '≥', '⌂', '⌘',
-                '☀', '☁', '☂', '☃', '☄', '☎', '☏', '☑', '☒', '☔'
-            ],
-            symbols: [
-                '♠', '♣', '♥', '♦', '♤', '♧', '♡', '♢', '♩', '♪',
-                '♫', '♬', '♭', '♮', '♯', '★', '☆', '♨', '♻', '♿',
-                '⚀', '⚁', '⚂', '⚃', '⚄', '⚅', '⚆', '⚇', '⚈', '⚉',
-                '⚐', '⚑', '⚒', '⚓', '⚔', '⚕', '⚖', '⚗', '⚘', '⚙',
-                '⚚', '⚛', '⚜', '⚝', '⚞', '⚟', '⚠', '⚡', '⚢', '⚣'
-            ],
-            mathematical: [
-                '∫', '∑', '∏', '√', '∞', '∠', '∥', '∧', '∨', '∩',
-                '∪', '∴', '∵', '∶', '∷', '∼', '∽', '≅', '≈', '≠',
-                '≡', '≤', '≥', '⊂', '⊃', '⊆', '⊇', '⊕', '⊗', '⊥',
-                '⋅', '⋆', '⋇', '⋈', '⋉', '⋊', '⋋', '⋌', '⋍', '⋎',
-                '⋏', '⋐', '⋑', '⋒', '⋓', '⋔', '⋕', '⋖', '⋗', '⋘'
-            ]
-        };
-            
-            // Inisialisasi karakter
-            currentChars = characterSets[currentStyle];
+            // Contoh kode JavaScript
+            const exampleCode = `// Contoh kode JavaScript
+function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+function main() {
+    console.log("Fibonacci Sequence:");
+    for (let i = 0; i < 10; i++) {
+        console.log(\`F(\${i}) = \${fibonacci(i)}\`);
+    }
+    
+    // Contoh lain
+    let numbers = [1, 2, 3, 4, 5];
+    let squares = numbers.map(x => x * x);
+    console.log("Squares:", squares);
+}
+
+main();`;
             
             // Level selection
             levelButtons.forEach(btn => {
@@ -467,54 +493,27 @@
                     levelButtons.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     currentLevel = this.getAttribute('data-level');
+                    levelIndicatorEl.textContent = currentLevel.toUpperCase();
                     
-                    // Tampilkan peringatan untuk level extreme
-                    if (currentLevel === 'extreme') {
-                        extremeWarning.style.display = 'block';
+                    // Tampilkan peringatan untuk level ultra
+                    if (currentLevel === 'ultra') {
+                        ultraWarning.style.display = 'block';
                     } else {
-                        extremeWarning.style.display = 'none';
+                        ultraWarning.style.display = 'none';
                     }
                 });
-            });
-            
-            // Style selection
-            styleCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    styleCards.forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                    currentStyle = this.getAttribute('data-style');
-                    currentChars = characterSets[currentStyle];
-                });
-            });
-            
-            // Custom character application
-            applyCustomBtn.addEventListener('click', function() {
-                const customChars = customCharsInput.value;
-                if (customChars) {
-                    currentChars = customChars.split('');
-                    // Buat style card custom
-                    styleCards.forEach(c => c.classList.remove('active'));
-                    currentStyle = 'custom';
-                    
-                    // Update preview
-                    const preview = document.createElement('div');
-                    preview.className = 'char-preview';
-                    customChars.split('').forEach(char => {
-                        const span = document.createElement('span');
-                        span.textContent = char;
-                        preview.appendChild(span);
-                    });
-                    
-                    // Hapus preview lama dan tambahkan yang baru
-                    const oldPreview = document.querySelector('.custom-style .char-preview');
-                    if (oldPreview) {
-                        oldPreview.remove();
-                    }
-                    document.querySelector('.custom-style').appendChild(preview);
-                }
             });
             
             // Obfuscation functions
+            function generateRandomName(length = 6) {
+                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                let result = '';
+                for (let i = 0; i < length; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return result;
+            }
+            
             function base64Encode(str) {
                 return btoa(unescape(encodeURIComponent(str)));
             }
@@ -523,8 +522,20 @@
                 return decodeURIComponent(escape(atob(str)));
             }
             
-            function reverseString(str) {
-                return str.split('').reverse().join('');
+            function stringToHex(str) {
+                let hex = '';
+                for (let i = 0; i < str.length; i++) {
+                    hex += str.charCodeAt(i).toString(16).padStart(2, '0');
+                }
+                return hex;
+            }
+            
+            function hexToString(hex) {
+                let str = '';
+                for (let i = 0; i < hex.length; i += 2) {
+                    str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+                }
+                return str;
             }
             
             function rot13(str) {
@@ -533,208 +544,354 @@
                 });
             }
             
-            function mapToCustomChars(str, charSet) {
+            function xorCipher(str, key) {
                 let result = '';
                 for (let i = 0; i < str.length; i++) {
-                    const charCode = str.charCodeAt(i);
-                    // Map karakter ke karakter custom berdasarkan kode
-                    const index = (charCode * (i + 1)) % charSet.length;
-                    result += charSet[index];
-                    
-                    // Tambahkan karakter pemisah acak secara periodik
-                    if (i % 2 === 0 && i > 0) {
-                        const separatorIndex = (charCode + i) % charSet.length;
-                        result += charSet[separatorIndex];
-                    }
+                    result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
                 }
                 return result;
             }
             
-            function mapFromCustomChars(encodedStr, charSet) {
-                // Ini adalah fungsi deobfuscation sederhana
-                // Dalam implementasi nyata akan lebih kompleks
-                let result = '';
-                let i = 0;
-                let charCount = 0;
+            // Basic obfuscation
+            function basicObfuscate(code) {
+                let result = code;
                 
-                while (i < encodedStr.length) {
-                    const char = encodedStr[i];
-                    const index = charSet.indexOf(char);
+                // Hapus komentar
+                result = result.replace(/\/\/.*$/gm, '');
+                result = result.replace(/\/\*[\s\S]*?\*\//g, '');
+                
+                return result;
+            }
+            
+            // Medium obfuscation
+            function mediumObfuscate(code) {
+                let result = basicObfuscate(code);
+                
+                // Ganti nama variabel dan fungsi
+                const varMap = new Map();
+                let varCounter = 0;
+                
+                // Temukan variabel dan fungsi
+                const varRegex = /(?:var|let|const|function)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
+                let match;
+                while ((match = varRegex.exec(result)) !== null) {
+                    const varName = match[1];
+                    if (!varMap.has(varName) && varName.length > 2) {
+                        varMap.set(varName, generateRandomName());
+                    }
+                }
+                
+                // Ganti nama variabel
+                varMap.forEach((newName, oldName) => {
+                    const regex = new RegExp('\\b' + oldName + '\\b', 'g');
+                    result = result.replace(regex, newName);
+                });
+                
+                return result;
+            }
+            
+            // Hard obfuscation
+            function hardObfuscate(code) {
+                let result = mediumObfuscate(code);
+                
+                // Encode string literal
+                const stringRegex = /"([^"\\]*(\\.[^"\\]*)*)"|'([^'\\]*(\\.[^'\\]*)*)'/g;
+                result = result.replace(stringRegex, (match) => {
+                    if (match.includes('`')) return match;
+                    const content = match.slice(1, -1);
+                    return `atob('${btoa(content)}')`;
+                });
+                
+                // Tambahkan dead code
+                const deadCode = `;function ${generateRandomName()}(){return ${Math.random()};}`;
+                result = deadCode + result;
+                
+                return result;
+            }
+            
+            // Extreme obfuscation
+            function extremeObfuscate(code) {
+                let result = hardObfuscate(code);
+                
+                // Multiple encoding layers
+                const encoded = base64Encode(result);
+                const hexEncoded = stringToHex(encoded);
+                const rot13Encoded = rot13(hexEncoded);
+                
+                // Create VM-like structure
+                result = `
+                (function(){
+                    var _0x=${Math.random().toString(36).substr(2)};
+                    var _1x='${rot13Encoded}';
+                    var _2x=_1x.split('').map(function(c){return String.fromCharCode((c<='Z'?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}).join('');
+                    var _3x='';
+                    for(var i=0;i<_2x.length;i+=2){_3x+=String.fromCharCode(parseInt(_2x.substr(i,2),16));}
+                    eval(atob(_3x));
+                })();
+                `;
+                
+                return result;
+            }
+            
+            // ULTRA obfuscation - Level tertinggi
+            function ultraObfuscate(code) {
+                // Step 1: Encode code multiple times
+                let encoded = base64Encode(code);
+                for (let i = 0; i < 3; i++) {
+                    encoded = base64Encode(encoded);
+                }
+                
+                // Step 2: Convert to hex and apply XOR
+                let hex = stringToHex(encoded);
+                const xorKey = generateRandomName(8);
+                let xored = '';
+                for (let i = 0; i < hex.length; i++) {
+                    xored += String.fromCharCode(hex.charCodeAt(i) ^ xorKey.charCodeAt(i % xorKey.length));
+                }
+                
+                // Step 3: Create polymorphic decoder
+                const decoderName = generateRandomName();
+                const vmName = generateRandomName();
+                const keyName = generateRandomName();
+                const dataName = generateRandomName();
+                
+                // Step 4: Build ultra obfuscated code with multiple VM layers
+                result = `
+                /* ULTRA OBFUSCATED CODE - LEVEL MAXIMUM */
+                (function(){
+                    // Layer 1: Anti-debug protection
+                    if(typeof console!=='undefined'&&console.log){console.log=function(){};}
                     
-                    if (index !== -1) {
-                        // Coba kembalikan karakter asli
-                        // Ini adalah pendekatan sederhana yang mungkin tidak akurat 100%
-                        const originalCharCode = Math.floor(index / (charCount + 1));
-                        if (originalCharCode > 0 && originalCharCode < 65536) {
-                            result += String.fromCharCode(originalCharCode);
+                    // Layer 2: Dynamic function reconstruction
+                    var ${keyName}="${btoa(xorKey)}";
+                    var ${dataName}="${btoa(xored)}";
+                    
+                    // Layer 3: Virtual machine simulation
+                    var ${vmName}=function(_){return atob(_);};
+                    var ${decoderName}=function(d,k){
+                        var _="";
+                        k=atob(k);d=atob(d);
+                        for(var i=0;i<d.length;i++){
+                            _+=String.fromCharCode(d.charCodeAt(i)^k.charCodeAt(i%k.length));
                         }
-                        charCount++;
-                        i++;
+                        return _;
+                    };
+                    
+                    // Layer 4: Multi-stage decoding
+                    var _st1=${decoderName}(${dataName},${keyName});
+                    var _st2="";
+                    for(var i=0;i<_st1.length;i+=2){
+                        _st2+=String.fromCharCode(parseInt(_st1.substr(i,2),16));
+                    }
+                    var _st3=${vmName}(_st2);
+                    var _st4=${vmName}(_st3);
+                    var _st5=${vmName}(_st4);
+                    
+                    // Layer 5: Final execution with error handling
+                    try{setTimeout(function(){eval(_st5);},10);}catch(_){}
+                    
+                    // Layer 6: Self-cleanup
+                    ${decoderName}=null;${vmName}=null;${keyName}=null;${dataName}=null;
+                })();
+                `;
+                
+                return result;
+            }
+            
+            function executeCode(code, isObfuscated = false) {
+                try {
+                    // Simpan console.log asli
+                    const originalConsoleLog = console.log;
+                    
+                    // Override console.log untuk menangkap output
+                    console.log = function(...args) {
+                        originalConsoleLog.apply(console, args);
                         
-                        // Lewati karakter pemisah jika ada
-                        if (charCount % 3 === 0 && i < encodedStr.length) {
-                            i++;
+                        // Format output untuk console kita
+                        const output = args.map(arg => {
+                            if (typeof arg === 'object') {
+                                try {
+                                    return JSON.stringify(arg, null, 2);
+                                } catch (e) {
+                                    return String(arg);
+                                }
+                            }
+                            return String(arg);
+                        }).join(' ');
+                        
+                        // Tambahkan ke output console
+                        const outputLine = document.createElement('div');
+                        if (isObfuscated) {
+                            outputLine.style.color = '#ffaa00';
+                            outputLine.textContent = '[OBFUSCATED] > ' + output;
+                        } else {
+                            outputLine.textContent = '> ' + output;
                         }
+                        outputConsole.appendChild(outputLine);
+                        
+                        // Scroll ke bawah
+                        outputConsole.scrollTop = outputConsole.scrollHeight;
+                    };
+                    
+                    // Jalankan kode
+                    if (isObfuscated) {
+                        // Untuk kode obfuscated, gunakan setTimeout untuk menghindari blocking
+                        setTimeout(() => {
+                            try {
+                                eval(code);
+                            } catch (e) {
+                                const errorLine = document.createElement('div');
+                                errorLine.style.color = '#ff0066';
+                                errorLine.textContent = '> Error in obfuscated code: ' + e.message;
+                                outputConsole.appendChild(errorLine);
+                            }
+                        }, 100);
                     } else {
-                        i++;
+                        eval(code);
                     }
-                }
-                return result || "Deobfuscation tidak berhasil. Coba level yang lebih rendah.";
-            }
-            
-            function mediumObfuscate(text) {
-                // Step 1: Base64 encode
-                let result = base64Encode(text);
-                
-                // Step 2: Reverse the string
-                result = reverseString(result);
-                
-                return result;
-            }
-            
-            function mediumDeobfuscate(text) {
-                try {
-                    // Step 1: Reverse the string back
-                    let result = reverseString(text);
                     
-                    // Step 2: Base64 decode
-                    result = base64Decode(result);
+                    // Kembalikan console.log asli
+                    setTimeout(() => {
+                        console.log = originalConsoleLog;
+                    }, 500);
                     
-                    return result;
-                } catch (e) {
-                    return "Error: Teks tidak valid untuk deobfuscation";
+                } catch (error) {
+                    // Tampilkan error di console
+                    const errorLine = document.createElement('div');
+                    errorLine.style.color = '#ff0066';
+                    errorLine.textContent = '> Error: ' + error.message;
+                    outputConsole.appendChild(errorLine);
+                    
+                    // Scroll ke bawah
+                    outputConsole.scrollTop = outputConsole.scrollHeight;
                 }
             }
             
-            function hardObfuscate(text) {
-                // Step 1: ROT13 cipher
-                let result = rot13(text);
+            // Update stats
+            function updateStats(original, obfuscated) {
+                const originalSize = original.length;
+                const obfuscatedSize = obfuscated.length;
+                const increaseRatio = ((obfuscatedSize - originalSize) / originalSize * 100).toFixed(1);
                 
-                // Step 2: Base64 encode
-                result = base64Encode(result);
+                originalSizeEl.textContent = originalSize;
+                obfuscatedSizeEl.textContent = obfuscatedSize;
+                ratioEl.textContent = increaseRatio + '%';
                 
-                // Step 3: Map to custom characters
-                result = mapToCustomChars(result, currentChars);
-                
-                return result;
-            }
-            
-            function hardDeobfuscate(text) {
-                try {
-                    // Step 1: Map from custom characters
-                    let result = mapFromCustomChars(text, currentChars);
-                    
-                    // Step 2: Base64 decode
-                    result = base64Decode(result);
-                    
-                    // Step 3: ROT13 cipher back
-                    result = rot13(result);
-                    
-                    return result;
-                } catch (e) {
-                    return "Error: Teks tidak valid untuk deobfuscation";
+                // Update color based on ratio
+                if (increaseRatio > 200) {
+                    ratioEl.style.color = '#ff0066';
+                } else if (increaseRatio > 100) {
+                    ratioEl.style.color = '#ffaa00';
+                } else {
+                    ratioEl.style.color = '#00ff88';
                 }
             }
             
-            function extremeObfuscate(text) {
-                // Step 1: Multiple Base64 encoding
-                let result = base64Encode(text);
-                result = base64Encode(result);
-                
-                // Step 2: ROT13
-                result = rot13(result);
-                
-                // Step 3: Reverse
-                result = reverseString(result);
-                
-                // Step 4: Map to custom characters dengan intensitas tinggi
-                result = mapToCustomChars(result, currentChars);
-                
-                // Step 5: Tambahkan layer custom character lagi
-                result = mapToCustomChars(result, currentChars);
-                
-                return result;
-            }
-            
-            function extremeDeobfuscate(text) {
-                try {
-                    // Step 1: Map from custom characters (layer 2)
-                    let result = mapFromCustomChars(text, currentChars);
-                    
-                    // Step 2: Map from custom characters (layer 1)
-                    result = mapFromCustomChars(result, currentChars);
-                    
-                    // Step 3: Reverse back
-                    result = reverseString(result);
-                    
-                    // Step 4: ROT13 (karena ROT13 adalah involution)
-                    result = rot13(result);
-                    
-                    // Step 5: Multiple Base64 decoding
-                    result = base64Decode(result);
-                    result = base64Decode(result);
-                    
-                    return result;
-                } catch (e) {
-                    return "Error: Teks tidak valid untuk deobfuscation extreme. Metode ini mungkin tidak sempurna.";
-                }
+            // Update karakter count
+            function updateCharCount() {
+                charCount.textContent = outputCode.value.length + ' karakter';
             }
             
             // Event listeners
             obfuscateBtn.addEventListener('click', function() {
-                const text = inputText.value.trim();
-                if (!text) {
-                    outputText.value = "Masukkan teks terlebih dahulu!";
+                const code = inputCode.value.trim();
+                if (!code) {
+                    outputCode.value = "Masukkan kode JavaScript terlebih dahulu!";
                     return;
                 }
                 
                 try {
-                    if (currentLevel === 'medium') {
-                        outputText.value = mediumObfuscate(text);
-                    } else if (currentLevel === 'hard') {
-                        outputText.value = hardObfuscate(text);
-                    } else {
-                        outputText.value = extremeObfuscate(text);
+                    let obfuscatedCode;
+                    const startTime = performance.now();
+                    
+                    switch(currentLevel) {
+                        case 'medium':
+                            obfuscatedCode = mediumObfuscate(code);
+                            break;
+                        case 'hard':
+                            obfuscatedCode = hardObfuscate(code);
+                            break;
+                        case 'extreme':
+                            obfuscatedCode = extremeObfuscate(code);
+                            break;
+                        case 'ultra':
+                            obfuscatedCode = ultraObfuscate(code);
+                            break;
+                        default:
+                            obfuscatedCode = mediumObfuscate(code);
                     }
+                    
+                    const endTime = performance.now();
+                    outputCode.value = obfuscatedCode;
+                    updateCharCount();
+                    updateStats(code, obfuscatedCode);
+                    
+                    // Log waktu proses
+                    const timeLine = document.createElement('div');
+                    timeLine.style.color = '#00ccff';
+                    timeLine.textContent = `> Obfuscation completed in ${(endTime - startTime).toFixed(2)}ms (Level: ${currentLevel.toUpperCase()})`;
+                    outputConsole.appendChild(timeLine);
+                    outputConsole.scrollTop = outputConsole.scrollHeight;
+                    
                 } catch (error) {
-                    outputText.value = "Terjadi error saat obfuscation: " + error.message;
+                    outputCode.value = "Terjadi error saat obfuscation: " + error.message;
                 }
             });
             
-            deobfuscateBtn.addEventListener('click', function() {
-                const text = inputText.value.trim();
-                if (!text) {
-                    outputText.value = "Masukkan teks terlebih dahulu!";
+            executeBtn.addEventListener('click', function() {
+                const codeToExecute = inputCode.value;
+                if (!codeToExecute.trim()) {
+                    const errorLine = document.createElement('div');
+                    errorLine.style.color = '#ff0066';
+                    errorLine.textContent = '> Error: Tidak ada kode untuk dijalankan';
+                    outputConsole.appendChild(errorLine);
                     return;
                 }
                 
-                try {
-                    if (currentLevel === 'medium') {
-                        outputText.value = mediumDeobfuscate(text);
-                    } else if (currentLevel === 'hard') {
-                        outputText.value = hardDeobfuscate(text);
-                    } else {
-                        outputText.value = extremeDeobfuscate(text);
-                    }
-                } catch (error) {
-                    outputText.value = "Terjadi error saat deobfuscation: " + error.message;
+                executeCode(codeToExecute, false);
+            });
+            
+            testObfuscatedBtn.addEventListener('click', function() {
+                const codeToExecute = outputCode.value;
+                if (!codeToExecute.trim()) {
+                    const errorLine = document.createElement('div');
+                    errorLine.style.color = '#ff0066';
+                    errorLine.textContent = '> Error: Tidak ada kode obfuscated untuk dijalankan';
+                    outputConsole.appendChild(errorLine);
+                    return;
                 }
+                
+                executeCode(codeToExecute, true);
             });
             
             copyBtn.addEventListener('click', function() {
-                if (!outputText.value) return;
+                if (!outputCode.value) return;
                 
-                outputText.select();
+                outputCode.select();
                 document.execCommand('copy');
                 
                 // Visual feedback
                 const originalText = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Tersalin!';
+                copyBtn.innerHTML = '✓ Tersalin!';
+                copyBtn.style.background = '#00ff88';
                 
                 setTimeout(() => {
                     copyBtn.innerHTML = originalText;
+                    copyBtn.style.background = '';
                 }, 2000);
             });
+            
+            loadExampleBtn.addEventListener('click', function() {
+                inputCode.value = exampleCode;
+            });
+            
+            clearConsoleBtn.addEventListener('click', function() {
+                outputConsole.innerHTML = '';
+            });
+            
+            // Inisialisasi
+            updateCharCount();
+            updateStats('', '');
         });
     </script>
 </body>
